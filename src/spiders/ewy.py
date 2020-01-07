@@ -13,10 +13,12 @@ def ewy_spider():
     table = browser.wait_for_element('tbody.CI-GRID-BODY-TABLE-TBODY')
     print('The table founded %s' % table)
 
+    print('The table content is %s' % table.get_attribute('innerHTML'))
+
     submit_btn = driver.find_element_by_css_selector('button.btn-board-search')
     submit_btn.click()
 
-    driver.implicitly_wait(5)
+    # driver.implicitly_wait(5)
     driver.close()
 
 if __name__ == '__main__':
