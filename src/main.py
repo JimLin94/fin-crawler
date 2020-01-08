@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import sys
-from spiders.ewy import ewy_spider
+from spiders import kospi, n225
 
 spider_name = sys.argv[1]
 
 def switcher():
     switch = {
-        'ewy': ewy_spider
+        'kospi': kospi.kospi_spider,
+        'n225': n225.n225_spider
     }
     fn = switch.get(spider_name, "nothing")
 
