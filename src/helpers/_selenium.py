@@ -7,30 +7,22 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 class ClientSideCrawler:
-    def __init__(self, url):
+    def __init__(self, url, is_headless = False):
         options = Options()
-        options.headless = True
+        options.headless = is_headless
+        options.add_argument('--window-size=1360,768')
+        options.add_argument('--disable-gpu')
         # driver = webdriver.Chrome(chrome_options=options, executable_path='/Users/jim/Apps/chromedriver')
         self.driver = webdriver.Chrome(chrome_options=options)
         self.driver.get(url)
 
     def wait_for_element(self, css_selector):
         try:
-            element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
-        except IOError:
+            element = WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
+        except TimeoutError:
             print('Cannot find the element')
 
         return element
-
-    def wait(self, delay = 5):
-        self.driver.implicitly_wait(delay)
-    # def crawl_url(self, url):
-    #     driver = self.driver
-    #     driver.get(url)
-    #     # elem = driver.find_element_by_name("q")
-    #     # elem.send_keys("pycon")
-    #     # elem.send_keys(Keys.RETURN)
-    #     # assert "No results found." not in driver.page_source
 
     def tearDown(self):
         self.driver.close()
