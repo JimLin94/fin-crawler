@@ -34,7 +34,7 @@ def kospi_spider():
     table = lxml.html.fromstring(table_element_string)
 
     # print('The table founded %s' % lxml.html.tostring(table))
-    pd = parse_html_to_excel(lxml.html.tostring(table), 'kospi.xlsx', _next_date)
+    pd = parse_html_to_excel(lxml.html.tostring(table), 'kospi.xlsx', _next_date, True)
 
     submit_btn = driver.find_element_by_css_selector('button.btn-board-search')
     submit_btn.click()
