@@ -1,15 +1,27 @@
 # -*- coding: utf-8 -*-
-
-import pandas as pd
+import requests
+from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from configs.url import N225
-from helpers._pd import parse_html_to_excel
+import pandas as pd
 from helpers._pd import parse_html_to_excel
 
 def n225_spider():
-    html_df = pd.read_html(N225)
-    _next_date = datetime.strftime(datetime.now() - timedelta(1), '%Y%m%d')
+    res = requests.get(N225)
+    print('Request %s' % res.status_code)
 
-    print('HTML %s' % html_df)
+    if res.status_code == requests.codes.ok:
+        soup = BeautifulSoup(res.content, 'html.parser')
+        code_list = soup.select('.row.component-list > div')
+        company_list = soup.select('.row.component-list > a')
+        today = datetime.strftime(datetime.now(), '%Y%m%d')
+        source = []
 
-    parse_html_to_excel(html_df, 'n225.xlsx', _next_date)
+        for idx in range(len(code_list)):
+            source.append([code_list[idx].get_text(), company_list[idx].get_text()])
+
+        # print('HTML %s %s' % (code_list, company_list))
+    df = pd.DataFrame(source, columns=['Code', 'Company'])
+
+    print('DF %s' % df)
+    parse_html_to_excel(df, 'n225.xlsx', today)

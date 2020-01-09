@@ -1,1 +1,1 @@
-DB_PATH = '/db'
+DB_PATH = 'db'
