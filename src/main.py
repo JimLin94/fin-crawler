@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from spiders import kospi, n225
+from packages import kospi, n225
 
 spider_name = sys.argv[1]
 

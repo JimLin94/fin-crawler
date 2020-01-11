@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
+import time
+from datetime import datetime, timedelta
+from configs.path import DOWNLOAD_PATH
 from helpers._selenium import ClientSideCrawler
 from configs.url import KRX
 from helpers._pd import parse_html_to_excel
-import lxml.html
-from datetime import datetime, timedelta
 
 def kospi_spider():
     browser = ClientSideCrawler(KRX)
@@ -19,25 +21,29 @@ def kospi_spider():
     date_input.clear()
     date_input.send_keys(_next_date)
 
-    # Download the xml
+    # Click the search button.
+    submit_btn = driver.find_element_by_css_selector('button.btn-board-search')
+    submit_btn.click()
+
+    # Download the xml.
     download_btn = driver.find_element_by_css_selector(
         'button.btn-board-download')
     download_btn.click()
 
-    # Wait for the fetching data and get the HTML table.
-    browser.wait_for_element('tbody.CI-GRID-BODY-TABLE-TBODY tr')
-    table_element = driver.find_element_by_css_selector(
-        'div.CI-GRID-BODY-INNER')
+    timeout = 5
+    seconds = 0
+    files = os.listdir(DOWNLOAD_PATH)
 
-    # Extract the table string and write to the excel file.
-    table_element_string = table_element.get_attribute('innerHTML')
-    table = lxml.html.fromstring(table_element_string)
+    while seconds < timeout:
+        time.sleep(1)
+        next_files = os.listdir(DOWNLOAD_PATH)
 
-    # print('The table founded %s' % lxml.html.tostring(table))
-    pd = parse_html_to_excel(lxml.html.tostring(table), 'kospi.xlsx', _next_date, True)
+        print('Counting down %s' % seconds)
 
-    submit_btn = driver.find_element_by_css_selector('button.btn-board-search')
-    submit_btn.click()
+        if len(next_files) > len(files):
+            print('Done. Please read the file in %s' % DOWNLOAD_PATH)
+            driver.close()
+        seconds += 1
 
     driver.close()
 
