@@ -2,9 +2,23 @@ version: "3"
 
 services:
     db:
-        image: mysql:8.0.19
+        image: mysql/mysql-server:5.7
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: fin
+            MYSQL_DATABASE: trading_club
         ports:
             - "3308:3306"
+
+    crawler:
+        build:
+            context: .
+            dockerfile: docker/python.dockerfile
+        ports:
+            - 3005:3000
+        volumes:
+            - .:/app
+
+
+networks:
+    backend:
+        driver: bridge
