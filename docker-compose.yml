@@ -17,8 +17,6 @@ services:
             - 3005:3000
         volumes:
             - .:/app
+        links:
+            - db:db
 
-
-networks:
-    backend:
-        driver: bridge

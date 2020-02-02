@@ -7,7 +7,8 @@ import pandas as pd
 
 from configs.url import N225
 from helpers._pd import parse_html_to_excel
-from helpers._mysql import df_insert_to_db, check_value_exist
+from helpers._mysql import df_insert_to_db, check_value_exist, run_query
+from settings import DB_NAME
 
 TABLE_NAME = 'n225'
 
@@ -41,11 +42,7 @@ def n225_spider():
     df = pd.DataFrame(source, columns=['Code', 'Company', 'Date'])
 
     try:
-        is_duplicated = check_value_exist(
-            'SELECT * FROM %s WHERE Date="%s"' % (TABLE_NAME, updated_time_form_text))
-
-        if not is_duplicated:
-            df_insert_to_db('%s' % TABLE_NAME, df)
+        df_insert_to_db('%s' % TABLE_NAME, df)
     except Exception:
         print('Import to the database failed. Export to the excel instead')
         parse_html_to_excel(df, '%s.xlsx' % TABLE_NAME, today)
