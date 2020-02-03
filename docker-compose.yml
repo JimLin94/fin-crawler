@@ -3,6 +3,7 @@ version: "3"
 services:
     db:
         image: mysql/mysql-server:5.7
+        tty: true
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: trading_club
@@ -17,6 +18,9 @@ services:
             - 3005:3000
         volumes:
             - .:/app
+        tty: true
+        depends_on:
+        - "db"
         links:
             - db:db
 
