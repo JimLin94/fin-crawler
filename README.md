@@ -31,4 +31,10 @@ python src/main.py `{spider_name}` e.g ewy, etc.
 - (Create a user with remotely accessible connect)[http://itman.in/en/mysql-add-user-for-remote-access/]
 - (Grant the user privileges)[https://chartio.com/resources/tutorials/how-to-grant-all-privileges-on-a-database-in-mysql/]
 
+### env for the crawler container
 
+DB_NAME=trading_club
+DB_USER=xxx
+DB_PASS=xxx
+DB_HOST=db
+DB_PORT=3306

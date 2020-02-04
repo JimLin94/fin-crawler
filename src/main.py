@@ -23,7 +23,9 @@ def crawler():
                 print('Jobs...', v)
                 v()
 
-        schedule.every(5).seconds.do(run_jobs)
+        # schedule.every(5).seconds.do(run_jobs)
+        run_jobs()
+        schedule.every(8).hours.do(run_jobs)
 
         while True:
             schedule.run_pending()
