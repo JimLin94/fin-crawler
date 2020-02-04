@@ -6,9 +6,13 @@ services:
         tty: true
         environment:
             MYSQL_ROOT_PASSWORD: root
+            MYSQL_USER: jim
+            MYSQL_PASSWORD: jim
             MYSQL_DATABASE: trading_club
         ports:
             - "3308:3306"
+        volumes:
+            - ./data:/var/lib/mysql
 
     crawler:
         build:
@@ -20,7 +24,7 @@ services:
             - .:/app
         tty: true
         depends_on:
-        - "db"
+            - db
         links:
             - db:db
 
