@@ -2,7 +2,7 @@
 import schedule
 import time
 import sys
-from packages import kospi, n225
+from packages import kospi, n225, topix
 
 spider_name = sys.argv[1] if len(sys.argv) > 1 else False
 
@@ -11,6 +11,7 @@ def crawler():
 
     jobs = {
         # 'kospi': kospi.kospi_spider,
+        'topix': topix.topix_spider,
         'n225': n225.n225_spider
     }
 
