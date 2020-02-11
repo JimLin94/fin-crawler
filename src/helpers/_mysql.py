@@ -19,6 +19,7 @@ def df_insert_to_db(table_name, df, check_value):
         'SELECT * FROM %s WHERE Date="%s"' % (table_name, check_value)).fetchone()
 
     print(is_duplicated)
+
     if not is_duplicated:
         df.to_sql(table_name, con=engine, if_exists='append', index_label='id')
         result = engine.execute("SELECT * FROM %s" % table_name).fetchall()
