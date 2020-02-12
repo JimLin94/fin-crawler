@@ -23,7 +23,6 @@ def df_insert_to_db(table_name, df, check_value):
     if not is_duplicated:
         df.to_sql(table_name, con=engine, if_exists='append', index_label='id')
         result = engine.execute("SELECT * FROM %s" % table_name).fetchall()
-        print(result)
     else:
         print('Data exist %s' % check_value)
 
@@ -46,8 +45,6 @@ def check_value_exist(search_query):
             # Read a single record
             cursor.execute(search_query)
             result = cursor.fetchone()
-
-            print('Result %s', result)
 
             return bool(result)
     finally:

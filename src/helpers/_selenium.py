@@ -5,7 +5,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from configs.path import DOWNLOAD_PATH
+from settings import WEB_DRIVER_HOST, WEB_DRIVER_PORT
 
 class ClientSideCrawler:
     def __init__(self, url, is_headless=False):
@@ -14,8 +16,9 @@ class ClientSideCrawler:
         options.add_argument('download.default_directory=' + DOWNLOAD_PATH)
         options.add_argument('--window-size=1360,768')
         options.add_argument('--disable-gpu')
-        # driver = webdriver.Chrome(chrome_options=options, executable_path='/Users/jim/Apps/chromedriver')
-        self.driver = webdriver.Chrome(chrome_options=options)
+        self.driver = webdriver.Chrome(
+            chrome_options=options, executable_path='http://%s:%s/wd/hub' % (WEB_DRIVER_HOST, WEB_DRIVER_PORT))
+        # self.driver = webdriver.Remote(desired_capabilities=options.to_capabilities())
         self.driver.get(url)
 
     def wait_for_element(self, css_selector):
