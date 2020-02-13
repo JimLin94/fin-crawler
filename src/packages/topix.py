@@ -9,9 +9,10 @@ from helpers._pd import parse_xlsx_to_df
 DATA_STORE_PATH = os.path.join(os.getcwd(), DB_PATH)
 
 def topix_spider():
+    browser = ClientSideCrawler(TOPIX, True)
+    driver = browser.driver
+
     try:
-        browser = ClientSideCrawler(TOPIX, True)
-        driver = browser.driver
         href = driver.execute_script('''
             var sections = document.querySelectorAll('.component-file');
             var targetIdx = -1;
@@ -40,10 +41,10 @@ def topix_spider():
                 'Issue to which the liquidity factor is applied'].replace('○', 1)
             print('DF %s' % df)
 
-        driver.close()
-    except Exception as inst:
-        print('Error occurs while running TOPIX %s' % inst)
-
+        browser.tearDown()
+    except Exception:
+        browser.tearDown()
+        print('Error occurs while running TOPIX')
 
 if __name__ == '__main__':
     topix_spider()

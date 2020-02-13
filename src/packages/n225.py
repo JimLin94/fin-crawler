@@ -43,6 +43,6 @@ def n225_spider():
 
     try:
         df_insert_to_db('%s' % TABLE_NAME, df, updated_time_form_text)
-    except Exception as inst:
-        print('Import to the database failed. Export to the excel instead %s' % inst)
+    except Exception:
+        print('Import to the database failed. Export to the excel instead')
         parse_html_to_excel(df, '%s.xlsx' % TABLE_NAME, today)
