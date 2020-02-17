@@ -3,7 +3,7 @@ import pymysql.cursors
 import pandas as pd
 from settings import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS
 
-def df_insert_to_db(table_name, df, check_value):
+def df_insert_to_db(table_name, df, check_value_column_name, check_value):
     engine = create_engine(
         'mysql+pymysql://%s:%s@%s:%s' % (DB_USER, DB_PASS, DB_HOST, DB_PORT), echo=True)
     engine.execute('''
@@ -12,11 +12,11 @@ def df_insert_to_db(table_name, df, check_value):
     engine.execute('''
         use %s;
     ''' % (DB_NAME))
-    engine.execute('''
-        CREATE TABLE IF NOT EXISTS %s (id INT(11) NOT NULL, Code VARCHAR(225), Company VARCHAR(225), Date DATE) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-    ''' % (table_name))
+    # engine.execute('''
+    #     CREATE TABLE IF NOT EXISTS %s (id INT(11) NOT NULL, Code VARCHAR(225), Company VARCHAR(225), Date DATE) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+    # ''' % (table_name))
     is_duplicated = engine.execute(
-        'SELECT * FROM %s WHERE Date="%s"' % (table_name, check_value)).fetchone()
+        'SELECT * FROM %s WHERE %s="%s"' % (table_name, check_value_column_name, check_value)).fetchone()
 
     print(is_duplicated)
 

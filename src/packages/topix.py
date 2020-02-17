@@ -5,6 +5,7 @@ from helpers._selenium import ClientSideCrawler
 from configs.url import TOPIX
 from configs.path import DB_PATH
 from helpers._pd import parse_xlsx_to_df
+import pandas as pd
 
 DATA_STORE_PATH = os.path.join(os.getcwd(), DB_PATH)
 
@@ -41,10 +42,12 @@ def topix_spider():
                 'Issue to which the liquidity factor is applied'].replace('○', 1)
             print('DF %s' % df)
 
-        browser.tearDown()
+            df = pd.DataFrame(source, columns=['Code', 'Company', 'Date'])
+
+        browser.tear_down()
     except Exception:
-        browser.tearDown()
         print('Error occurs while running TOPIX')
+        browser.tear_down()
 
 if __name__ == '__main__':
     topix_spider()

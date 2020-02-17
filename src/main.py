@@ -11,8 +11,8 @@ def crawler():
 
     jobs = {
         # 'kospi': kospi.kospi_spider,
+        'n225': n225.n225_spider,
         'topix': topix.topix_spider,
-        'n225': n225.n225_spider
     }
 
     if spider_name:

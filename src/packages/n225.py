@@ -42,7 +42,8 @@ def n225_spider():
     df = pd.DataFrame(source, columns=['Code', 'Company', 'Date'])
 
     try:
-        df_insert_to_db('%s' % TABLE_NAME, df, updated_time_form_text)
+        df_insert_to_db(table_name=TABLE_NAME, df=df,
+                        check_value_column_name='Date', check_value=updated_time_form_text)
     except Exception:
         print('Import to the database failed. Export to the excel instead')
         parse_html_to_excel(df, '%s.xlsx' % TABLE_NAME, today)
