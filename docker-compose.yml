@@ -13,6 +13,11 @@ services:
             - "3308:3306"
         volumes:
             - ./data:/var/lib/mysql
+        # healthcheck:
+        #     test: ["CMD-SHELL", "pg_isready -U postgres"]
+        #     interval: 10s
+        #     timeout: 5s
+        #     retries: 3
 
     crawler:
         build:
@@ -30,6 +35,7 @@ services:
             - db:db
             - selenium-hub:selenium-hub
 
+
     selenium-hub:
         image: selenium/hub:3.141.59-zinc
         container_name: selenium-hub
@@ -44,4 +50,3 @@ services:
         environment:
             - HUB_HOST=selenium-hub
             - HUB_PORT=4444
-

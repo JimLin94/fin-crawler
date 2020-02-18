@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 import pymysql.cursors
 import pandas as pd
 from settings import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS
@@ -12,19 +12,24 @@ def df_insert_to_db(table_name, df, check_value_column_name, check_value):
     engine.execute('''
         use %s;
     ''' % (DB_NAME))
-    # engine.execute('''
-    #     CREATE TABLE IF NOT EXISTS %s (id INT(11) NOT NULL, Code VARCHAR(225), Company VARCHAR(225), Date DATE) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-    # ''' % (table_name))
-    is_duplicated = engine.execute(
-        'SELECT * FROM %s WHERE %s="%s"' % (table_name, check_value_column_name, check_value)).fetchone()
+    is_table_exist = engine.execute('''
+        SHOW TABLES LIKE '%s';
+    ''' % (table_name)).fetchone()
 
-    print(is_duplicated)
-
-    if not is_duplicated:
+    if not is_table_exist:
         df.to_sql(table_name, con=engine, if_exists='append', index_label='id')
         result = engine.execute("SELECT * FROM %s" % table_name).fetchall()
     else:
-        print('Data exist %s' % check_value)
+        is_duplicated = engine.execute(
+            'SELECT * FROM %s WHERE %s="%s"' % (table_name, check_value_column_name, check_value)).fetchone()
+
+        print(is_duplicated)
+
+        if not is_duplicated:
+            df.to_sql(table_name, con=engine, if_exists='append', index_label='id')
+            result = engine.execute("SELECT * FROM %s" % table_name).fetchall()
+        else:
+            print('Data exist %s' % check_value)
 
 def run_query(query):
     connection = pymysql.connect(host=DB_HOST, port=int(DB_PORT), user=DB_USER,
