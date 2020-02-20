@@ -5,7 +5,7 @@ from settings import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS
 
 def df_insert_to_db(table_name, df, check_value_column_name, check_value):
     engine = create_engine(
-        'mysql+pymysql://%s:%s@%s:%s' % (DB_USER, DB_PASS, DB_HOST, DB_PORT), echo=True)
+        'mysql+pymysql://%s:%s@%s:%s' % (DB_USER, DB_PASS, DB_HOST, DB_PORT), encoding = 'utf-8', echo=True)
     engine.execute('''
         CREATE DATABASE IF NOT EXISTS %s;
     ''' % (DB_NAME))

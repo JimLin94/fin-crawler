@@ -41,8 +41,9 @@ def topix_spider():
         df = parse_xlsx_to_df(file_name)
         df['Issue to which the liquidity factor is applied'] = df[
             'Issue to which the liquidity factor is applied'].fillna(0)
-        df['Issue to which the liquidity factor is applied'] = df[
-            'Issue to which the liquidity factor is applied'].replace('○', 1)
+        df['Issue to which the liquidity factor is applied']= df['Issue to which the liquidity factor is applied'].apply(lambda x: 1 if x!=0 else 0)
+        # df['Issue to which the liquidity factor is applied'] = df[
+        #     'Issue to which the liquidity factor is applied'].notna().replace('○', 1)
         print('DF %s' % df)
         current_date = df['Date'].iloc[0]
 

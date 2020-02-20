@@ -13,11 +13,11 @@ services:
             - "3308:3306"
         volumes:
             - ./data:/var/lib/mysql
-        # healthcheck:
-        #     test: ["CMD-SHELL", "pg_isready -U postgres"]
-        #     interval: 10s
-        #     timeout: 5s
-        #     retries: 3
+        healthcheck:
+            test: ["CMD-SHELL", "mysql --connect-timeout=1 -u root -proot -e \"select 1;\" > /dev/null 2>&1 || exit 1"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
 
     crawler:
         build:
@@ -41,6 +41,12 @@ services:
         container_name: selenium-hub
         ports:
             - "4444:4444"
+        healthcheck:
+            test: "curl -f http://localhost:4444 || false"
+            interval: 30s
+            timeout: 10s
+            retries: 3
+
     chrome:
         image: selenium/node-chrome:3.141.59-zinc
         volumes:
