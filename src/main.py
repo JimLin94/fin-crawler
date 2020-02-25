@@ -14,7 +14,7 @@ request_jobs = {
 
 selenium_jobs = {
     # 'kospi': kospi.kospi_spider,
-    'topix': topix.topix_spider,
+    # 'topix': topix.topix_spider,
 }
 
 def health_check(type):
