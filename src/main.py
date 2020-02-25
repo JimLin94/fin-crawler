@@ -70,7 +70,7 @@ def process():
         # The source is updated daily.
         schedule.every(12).hours.do(jobs['n225'])
         # The source is updated monthly.
-        schedule.every(20).days.do(jobs['topix'])
+        # schedule.every(20).days.do(jobs['topix'])
 
         while True:
             schedule.run_pending()
