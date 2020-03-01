@@ -61,10 +61,34 @@ def topix_spider():
                 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=INNODB;
             ''' % TABLE_NAME)
 
-            data_arr = list([(row[0], row[1], row[2], row[3], row[4], row[5], row[6]) for index, row in df.iterrows()])
-            print(data_arr)
-            db_con_inst.cursur.executemany('INSERT INTO topix (`date`, `issue`, `code`, `sector`, `component_weight`, `new_index_series_code`, `issue_to_which_the_liquidity_factor_is_applied`) VALUE (%s)', data_arr)
-            db_con_inst.commit()
+            db_con_inst.cursur.execute('''
+                SELECT * FROM %s WHERE date='%s'
+            ''' % (TABLE_NAME, df['Date'].iloc[0]))
+
+            has_data_existed = db_con_inst.cursur.fetchone()
+
+            if has_data_existed:
+                print('Data exists %s', df['Date'].iloc[0])
+                browser.tear_down()
+                return
+
+            data_arr = list()
+
+            for index, row in df.iterrows():
+                updated_row_date = str(row[0]) if row[0] else None
+                updated_row_issue = str(row[1]) if row[1] else None
+                updated_row_code = str(row[2]) if row[2] else None
+                updated_row_sector = str(row[3]) if row[3] else None
+                updated_row_component = str(row[4]) if row[4] else None
+                updated_row_new_index = str(row[5]) if row[5] else None
+                updated_row_issue_to = str(row[6]) if row[6] else 0
+
+                data_arr.append(
+                    [updated_row_date, updated_row_issue, updated_row_code, updated_row_sector, updated_row_component, updated_row_new_index, updated_row_issue_to])
+                query = 'INSERT INTO topix (`date`, `issue`, `code`, `sector`, `component_weight`, `new_index_series_code`, `issue_to_which_the_liquidity_factor_is_applied`) VALUES (%s, %s, %s, %s, %s, %s, %s)'
+
+            db_con_inst.cursur.executemany(query, data_arr)
+            db_con_inst.connection.commit()
 
         browser.tear_down()
     except Exception as inst:

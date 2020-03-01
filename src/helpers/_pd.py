@@ -22,9 +22,9 @@ def parse_html_to_excel(source, file_name, tab_name, is_source_not_df = False):
     with pd.ExcelWriter(target_file, date_format='YYYY-MM-DD', engine = 'openpyxl') as writer:
         pds_df.to_excel(writer, sheet_name=tab_name, index=False)
 
-def parse_xlsx_to_df(file_path, skip_footer_nums = 0):
+def parse_xlsx_to_df(file_path, skip_footer_nums = 0, dtypeType={}):
     if os.path.exists(file_path):
         df = pd.read_excel(file_path, sheet_name=0,
-                           skipfooter=skip_footer_nums)
+                           skipfooter=skip_footer_nums, dtypeType=dtypeType)
 
         return df

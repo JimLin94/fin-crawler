@@ -57,7 +57,7 @@ def check_value_exist(search_query):
 
 class PyMysql:
     def __init__(self):
-        self.connection = pymysql.connect(host=DB_HOST, port=int(DB_PORT), user=DB_USER, password=DB_PASS, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+        self.connection = pymysql.connect(host=DB_HOST, port=int(DB_PORT), user=DB_USER, password=DB_PASS, charset='utf8', cursorclass=pymysql.cursors.DictCursor)
         self.cursur = self.connection.cursor()
         self.cursur.execute('''
             CREATE DATABASE IF NOT EXISTS %s;

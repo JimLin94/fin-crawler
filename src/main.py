@@ -3,18 +3,19 @@ import schedule
 import time
 import sys
 import requests
-from packages import kospi, n225, topix
+from packages import kospi, n225, topix, shcomp
 from settings import DB_HOST, DB_PORT, WEB_DRIVER_HOST, WEB_DRIVER_PORT
 
 spider_name = sys.argv[1] if len(sys.argv) > 1 else False
 
 request_jobs = {
     'n225': n225.n225_spider,
+    'shcomp': shcomp.shcomp_spider
 }
 
 selenium_jobs = {
     # 'kospi': kospi.kospi_spider,
-    # 'topix': topix.topix_spider,
+    'topix': topix.topix_spider,
 }
 
 def health_check(type):
