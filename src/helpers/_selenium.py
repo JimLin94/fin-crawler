@@ -18,6 +18,8 @@ class ClientSideCrawler:
         options.add_argument('download.default_directory=' + DOWNLOAD_PATH)
         options.add_argument('--window-size=1360,768')
         options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
         # self.driver = webdriver.Chrome(
         #     chrome_options=options, executable_path='http://%s:%s/wd/hub' % (WEB_DRIVER_HOST, WEB_DRIVER_PORT))
         self.driver = webdriver.Remote(

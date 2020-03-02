@@ -18,43 +18,6 @@ selenium_jobs = {
     'topix': topix.topix_spider,
 }
 
-def health_check(type):
-    if type is 'db':
-        res = requests.get('http://%s:%s' % (DB_HOST, DB_PORT))
-        print('Request the DB is %s' % res.status_code)
-
-        if res.status_code == requests.codes.ok:
-            return True
-
-    if type is 'webdriver':
-        res = requests.get('http://%s:%s' % (WEB_DRIVER_HOST, WEB_DRIVER_PORT))
-        print('Request the DB is %s' % res.status_code)
-
-        if res.status_code == requests.codes.ok:
-            return True
-
-def request_crawler():
-    request_status_ok = health_check('db')
-
-    if request_status_ok:
-        for k, v in request_jobs.items():
-            print('Normal requesting Jobs...', v)
-            v()
-        schedule.every(12).hours.do(request_jobs['n225'])
-    else:
-        print('Cant connect to the DN')
-
-def selenium_crawler():
-    request_status_ok = health_check('webdriver')
-
-    if request_status_ok:
-        for k, v in request_jobs.items():
-            print('Web Driver Jobs...', v)
-            v()
-        schedule.every(20).days.do(request_jobs['topix'])
-    else:
-        print('Cant connect to the DB')
-
 def process():
     print('Launch the job...')
     jobs = {**request_jobs, **selenium_jobs}
@@ -69,9 +32,10 @@ def process():
             print('Jobs...', v)
             v()
         # The source is updated daily.
-        schedule.every(12).hours.do(jobs['n225'])
+        schedule.every(20).hours.do(jobs['n225'])
+        schedule.every(20).hours.do(jobs['shcomp'])
         # The source is updated monthly.
-        # schedule.every(20).days.do(jobs['topix'])
+        schedule.every(20).days.do(jobs['topix'])
 
         while True:
             schedule.run_pending()
