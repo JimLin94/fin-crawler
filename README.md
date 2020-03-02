@@ -3,9 +3,9 @@
 ## Milestone
 
  - [ ] KOSPI採用YAHOO FINANCE
- - [ ] N225採用YAHOO FINANCE
- - [ ] TOPIX採用YAHOO FINANCE
- - [ ] SHCOMP
+ - [X] N225採用YAHOO FINANCE
+ - [X] TOPIX採用YAHOO FINANCE
+ - [X] SHCOMP
  - [ ] TWSE
  - [ ] TWOTC
  - [X] SXXP 有代碼
