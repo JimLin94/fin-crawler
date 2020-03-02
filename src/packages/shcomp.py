@@ -44,8 +44,6 @@ def shcomp_spider():
                 ) CHARACTER SET utf8 ENGINE=INNODB;
             ''' % TABLE_NAME)
 
-            print(source)
-
             db_con_inst.cursur.execute('''
                 SELECT * FROM %s WHERE date='%s'
             ''' % (TABLE_NAME, source[0][2]))
