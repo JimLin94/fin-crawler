@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import re
+import sys
 from helpers._mysql import PyMysql
 
 TABLE_NAME = 'taifex'
@@ -85,6 +86,6 @@ def taifex_spider():
         db_con_inst.cursur.executemany(query, source)
         db_con_inst.connection.commit()
 
-    except ValueError as inst:
-        print(inst)
-        print('Parse the DOM error')
+    except:
+        e = sys.exc_info()[0]
+        print(e)

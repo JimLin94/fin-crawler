@@ -1,5 +1,6 @@
 from configs.url import YAHOO
 import requests
+import sys
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import re
@@ -60,9 +61,11 @@ def yahoo_spider():
                     db_con_inst.cursur.executemany(query, [[stock_code, float(low), float(high), updated_time]])
                     db_con_inst.connection.commit()
 
-                except ValueError as inst:
-                    print(inst)
+                except:
+                    e = sys.exc_info()[0]
+                    print(e)
                     print('Parse the DOM error compant code %s' % stock_code)
-    except ValueError as inst:
-        print(inst)
+    except:
+        e = sys.exc_info()[0]
+        print(e)
         print('Parse the DOM error compant code %s' % stock_code)
