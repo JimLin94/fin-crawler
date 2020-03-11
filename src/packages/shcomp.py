@@ -8,23 +8,24 @@ from helpers._mysql import PyMysql
 TABLE_NAME = 'shcomp'
 
 def shcomp_spider():
-    res = requests.get(SCHCOMP)
-    print('Request %s' % res.status_code)
+    try:
+        res = requests.get(SCHCOMP, timeout=20)
+        print('Request %s' % res.status_code)
 
-    if res.status_code == requests.codes.ok:
-        soup = BeautifulSoup(res.content, 'html.parser')
-        rows = soup.select('#content_ab table tr td a')
-        # rows = code_list.find_all('tr')
+        if res.status_code == requests.codes.ok:
+            soup = BeautifulSoup(res.content, 'html.parser')
+            rows = soup.select('#content_ab table tr td a')
+            # rows = code_list.find_all('tr')
 
-        updated_time = soup.select('#content_ab .tab_table_on')
-        today = datetime.strftime(datetime.now(), '%Y%m%d')
-        source = list()
+            updated_time = soup.select('#content_ab .tab_table_on')
+            today = datetime.strftime(datetime.now(), '%Y%m%d')
+            source = list()
 
-        try:
             raw_updated_time_text = updated_time[0].get_text()
             updated_time_text = re.sub('[^0-9]', '', raw_updated_time_text)
             print('updated_time_text__',
                   raw_updated_time_text, updated_time_text)
+
             updated_time_form_instance = datetime.strptime(
                 updated_time_text, '%Y%m%d')
             updated_time_form_text = updated_time_form_instance.strftime(
@@ -59,6 +60,6 @@ def shcomp_spider():
             db_con_inst.cursur.executemany(query, source)
             db_con_inst.connection.commit()
 
-        except ValueError as inst:
-            print(inst)
-            print('Parse the DOM error')
+    except ValueError as inst:
+        print(inst)
+        print('Parse the DOM error')

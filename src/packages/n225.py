@@ -13,18 +13,18 @@ from settings import DB_NAME
 TABLE_NAME = 'n225'
 
 def n225_spider():
-    res = requests.get(N225)
-    print('Request %s' % res.status_code)
+    try:
+        res = requests.get(N225)
+        print('Request %s' % res.status_code)
 
-    if res.status_code == requests.codes.ok:
-        soup = BeautifulSoup(res.content, 'html.parser')
-        code_list = soup.select('.row.component-list > div')
-        company_list = soup.select('.row.component-list > a')
-        updated_time = soup.select('.last-update')
-        today = datetime.strftime(datetime.now(), '%Y%m%d')
-        source = []
+        if res.status_code == requests.codes.ok:
+            soup = BeautifulSoup(res.content, 'html.parser')
+            code_list = soup.select('.row.component-list > div')
+            company_list = soup.select('.row.component-list > a')
+            updated_time = soup.select('.last-update')
+            today = datetime.strftime(datetime.now(), '%Y%m%d')
+            source = []
 
-        try:
             raw_updated_time_text = updated_time[0].get_text()
             updated_time_text = re.sub(r'^Update：', '', raw_updated_time_text)
             updated_time_form_instance = datetime.strptime(
@@ -36,15 +36,12 @@ def n225_spider():
             for idx in range(len(code_list)):
                 source.append([code_list[idx].get_text(), company_list[idx].get_text(
                 ), updated_time_form_text])
-        except ValueError:
-            print('Parse the DOM error')
 
-    df = pd.DataFrame(source, columns=['Code', 'Company', 'Date'])
+            df = pd.DataFrame(source, columns=['Code', 'Company', 'Date'])
 
-    try:
-        df_insert_to_db(table_name=TABLE_NAME, df=df,
-                        check_value_column_name='Date', check_value=updated_time_form_text)
+            df_insert_to_db(table_name=TABLE_NAME, df=df,
+                            check_value_column_name='Date', check_value=updated_time_form_text)
     except Exception as inst:
-        print('Import to the database failed. Export to the excel instead')
+        print('Import to the database failed. Export to the excel instead %s' % inst)
         print(inst)
         parse_html_to_excel(df, '%s.xlsx' % TABLE_NAME, today)
