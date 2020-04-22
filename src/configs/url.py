@@ -5,3 +5,4 @@ SCHCOMP = 'http://www.sse.com.cn/market/sseindex/indexlist/s/i000001/const_list.
 TAIFEX = 'https://www.taifex.com.tw/cht/9/futuresQADetail'
 TWOTC = 'https://www.tpex.org.tw/web/stock/iNdex_info/index/consti_result.php?l=zh-tw&d=108/12/19&s=0,asc,0&o=htm'
 YAHOO = 'https://finance.yahoo.com/quote/005930.KS?p='
+YAHOO_FINANCE = 'https://finance.yahoo.com/quote/'

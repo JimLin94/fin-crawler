@@ -3,7 +3,7 @@ import schedule
 import time
 import sys
 import requests
-from packages import kospi, n225, topix, shcomp, taifex, twotc, yahoo
+from packages import kospi, n225, topix, shcomp, taifex, twotc
 from settings import DB_HOST, DB_PORT, WEB_DRIVER_HOST, WEB_DRIVER_PORT
 
 spider_name = sys.argv[1] if len(sys.argv) > 1 else False
@@ -13,11 +13,10 @@ request_jobs = {
     'shcomp': shcomp.shcomp_spider,
     'taifex': taifex.taifex_spider,
     'twotc': twotc.twotc_spider,
-    'yahoo': yahoo.yahoo_spider
 }
 
 selenium_jobs = {
-    # 'kospi': kospi.kospi_spider,
+    'kospi': kospi.kospi_spider,
     'topix': topix.topix_spider,
 }
 
@@ -38,7 +37,6 @@ def process():
         schedule.every(20).hours.do(jobs['n225'])
         schedule.every(20).hours.do(jobs['shcomp'])
         schedule.every(20).hours.do(jobs['twotc'])
-        schedule.every(20).hours.do(jobs['yahoo'])
         # The source is updated monthly.
         schedule.every(25).days.do(jobs['topix'])
         schedule.every(25).hours.do(jobs['taifex'])

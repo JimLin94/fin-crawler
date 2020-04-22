@@ -6,14 +6,14 @@
  - [X] N225採用YAHOO FINANCE
  - [X] TOPIX採用YAHOO FINANCE
  - [X] SHCOMP
- - [ ] TWSE
- - [ ] TWOTC
+ - [X] TWSE
+ - [X] TWOTC
  - [X] SXXP 有代碼
 
 ## Prerequisite
 
  - Python 3.7 >
- - (Chromedriver >= 79)[https://chromedriver.chromium.org/downloads]
+ - Docker-compose v3
 
 
 ## Install
@@ -26,15 +26,20 @@ python src/main.py `{spider_name}` e.g ewy, etc.
 
 ## Docker
 
-### MySQL
+docker-compose up -d
+
+### MySQL NOTE
 
 - (Create a user with remotely accessible connect)[http://itman.in/en/mysql-add-user-for-remote-access/]
 - (Grant the user privileges)[https://chartio.com/resources/tutorials/how-to-grant-all-privileges-on-a-database-in-mysql/]
 
 ### env for the crawler container
 
-DB_NAME=trading_club
-DB_USER=xxx
-DB_PASS=xxx
 DB_HOST=db
 DB_PORT=3306
+DB_USER=jim
+DB_PASS=jim
+DB_NAME=trading_club
+WEB_DRIVER_HOST=selenium-hub
+WEB_DRIVER_PORT=4444
+
