@@ -99,7 +99,6 @@ def topix_spider():
             high_low = yahoo.yahoo_spider(search_code_column, TABLE_NAME_HIGHT_LOW, df['Date'].iloc[0])
             print('high_low %s' % high_low)
             store_high_low(TABLE_NAME_HIGHT_LOW, df['Date'].iloc[0], high_low)
-
         browser.tear_down()
     except Exception as inst:
         print('Error occurs while running TOPIX')

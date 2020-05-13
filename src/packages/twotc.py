@@ -5,8 +5,12 @@ from datetime import datetime, timedelta
 import re
 import sys
 from helpers._mysql import PyMysql
+from packages import yahoo
+from helpers.store_high_low import store_high_low
+from helpers.cnyes_api import cnyes_api
 
 TABLE_NAME = 'twotc'
+TABLE_NAME_HIGHT_LOW = 'twotchl52'
 
 def twotc_spider():
     try:
@@ -27,6 +31,7 @@ def twotc_spider():
 
             table = soup.select('table tbody tr')
             source = list()
+            codes = list()
 
             for row in table:
                 cols = row.select('td')
@@ -41,17 +46,15 @@ def twotc_spider():
 
                         if not is_exist:
                             continue
-
                         if idx == 2:
                             current = current.replace(',', '')
-
+                        if idx == 0:
+                            codes.append(current)
                         data.append(current)
 
                     data.append(updated_time)
-
                     source.append(data)
 
-        print('TABLE %s' % source)
         print('The length of the TWOTC data is %s' % len(source))
         print('Crawler by the date... %s', updated_time)
 
@@ -80,9 +83,12 @@ def twotc_spider():
 
         query = 'INSERT INTO twotc (`code`, `name`, `volume`, `close_price`, `industry`, `date`) VALUES (%s, %s, %s, %s, %s, %s)'
 
-        db_con_inst.cursur.executemany(query, source)
-        db_con_inst.connection.commit()
+        # db_con_inst.cursur.executemany(query, source)
+        # db_con_inst.connection.commit()
 
+        high_low = cnyes_api(symbols = codes, date = updated_time)
+        print('high_low %s' % high_low)
+        store_high_low(TABLE_NAME_HIGHT_LOW, updated_time, high_low)
     except:
         e = sys.exc_info()[0]
         print(e)

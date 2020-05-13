@@ -5,8 +5,11 @@ from datetime import datetime, timedelta
 import re
 import sys
 from helpers._mysql import PyMysql
+from helpers.store_high_low import store_high_low
+from helpers.cnyes_api import cnyes_api
 
 TABLE_NAME = 'taifex'
+TABLE_NAME_HIGHT_LOW = 'taifexhl52'
 
 def taifex_spider():
     try:
@@ -27,6 +30,7 @@ def taifex_spider():
 
             table = soup.select('table tr')
             source = list()
+            codes = list()
 
             for row in table:
                 cols = row.select('td')
@@ -50,6 +54,9 @@ def taifex_spider():
                             data = [current]
                         elif 4 <= idx < col_len:
                             data.append(current)
+
+                        if idx == 1:
+                            codes.append(current)
 
                     if len(data) == 4:
                         data.append(updated_time)
@@ -86,6 +93,9 @@ def taifex_spider():
         db_con_inst.cursur.executemany(query, source)
         db_con_inst.connection.commit()
 
+        high_low = cnyes_api(symbols = codes, date = updated_time)
+        print('high_low %s' % high_low)
+        store_high_low(TABLE_NAME_HIGHT_LOW, updated_time, high_low)
     except:
         e = sys.exc_info()[0]
         print(e)

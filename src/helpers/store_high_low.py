@@ -25,7 +25,6 @@ def store_high_low(table_name, updated_time, source):
             return
 
         query = 'INSERT INTO ' + table_name + ' (`company_code`, `52_week_range_low`, `52_week_range_high`, `date`) VALUES (%s, %s, %s, %s)'
-        print('Query %s' % query)
         db_con_inst.cursur.executemany(query, source)
         db_con_inst.connection.commit()
     except Exception as inst:

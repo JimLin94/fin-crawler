@@ -16,7 +16,7 @@ URL: https://finance.yahoo.com/quote/005930.KS
 
 def yahoo_spider(source = [], table_name = '', updated_time = None):
     low_hight_collection = []
-    # counter = 0
+    counter = 0
 
     try:
         db_con_inst = PyMysql()
@@ -44,15 +44,15 @@ def yahoo_spider(source = [], table_name = '', updated_time = None):
             res = requests.get(YAHOO_FINANCE + stock_code)
             print('Request %s %s' % (res.status_code, res.url))
 
-            # counter += 1
+            counter += 1
 
-            # if counter == 5:
-            #     break
+            if counter == 5:
+                break
 
             if res.status_code == requests.codes.ok:
                 soup = BeautifulSoup(res.content, 'html.parser')
                 target_cols = soup.select('#quote-summary > div table tbody tr:nth-child(6) td:nth-child(2)')
-                updated_time = datetime.strftime(datetime.now(), '%Y%m%d')
+                # updated_time = datetime.strftime(datetime.now(), '%Y%m%d')
 
                 try:
                     target_split = target_cols[0].get_text().strip().split('-')
