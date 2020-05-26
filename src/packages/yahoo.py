@@ -44,10 +44,10 @@ def yahoo_spider(source = [], table_name = '', updated_time = None):
             res = requests.get(YAHOO_FINANCE + stock_code)
             print('Request %s %s' % (res.status_code, res.url))
 
-            counter += 1
+            # counter += 1
 
-            if counter == 5:
-                break
+            # if counter == 5:
+            #     break
 
             if res.status_code == requests.codes.ok:
                 soup = BeautifulSoup(res.content, 'html.parser')

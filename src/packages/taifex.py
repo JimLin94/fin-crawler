@@ -7,9 +7,11 @@ import sys
 from helpers._mysql import PyMysql
 from helpers.store_high_low import store_high_low
 from helpers.cnyes_api import cnyes_api
+from packages import compare
 
 TABLE_NAME = 'taifex'
 TABLE_NAME_HIGHT_LOW = 'taifexhl52'
+HIGH_LOW_RECORD = 'taifex_hl52_record'
 
 def taifex_spider():
     try:
@@ -94,8 +96,8 @@ def taifex_spider():
         db_con_inst.connection.commit()
 
         high_low = cnyes_api(symbols = codes, date = updated_time)
-        print('high_low %s' % high_low)
         store_high_low(TABLE_NAME_HIGHT_LOW, updated_time, high_low)
+        compare.compare_hl(high_low, TABLE_NAME_HIGHT_LOW, datetime.strptime(updated_time, '%Y/%m/%d'), HIGH_LOW_RECORD)
     except:
         e = sys.exc_info()[0]
         print(e)
