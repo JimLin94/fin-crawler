@@ -5,12 +5,13 @@ from datetime import datetime, timedelta
 import re
 import sys
 from helpers._mysql import PyMysql
-from packages import yahoo
+from packages import compare
 from helpers.store_high_low import store_high_low
 from helpers.cnyes_api import cnyes_api
 
 TABLE_NAME = 'twotc'
 TABLE_NAME_HIGHT_LOW = 'twotchl52'
+HIGH_LOW_RECORD = 'twotc_hl52_record'
 
 def twotc_spider():
     try:
@@ -83,11 +84,13 @@ def twotc_spider():
 
         query = 'INSERT INTO twotc (`code`, `name`, `volume`, `close_price`, `industry`, `date`) VALUES (%s, %s, %s, %s, %s, %s)'
 
-        # db_con_inst.cursur.executemany(query, source)
-        # db_con_inst.connection.commit()
+        db_con_inst.cursur.executemany(query, source)
+        db_con_inst.connection.commit()
 
         high_low = cnyes_api(symbols = codes, date = updated_time)
         print('high_low %s' % high_low)
+        compare.compare_hl(high_low, TABLE_NAME_HIGHT_LOW, datetime.strptime(updated_time, '%Y%m%d'), HIGH_LOW_RECORD)
+        # Insert High-low 52 today after the comparison is done.
         store_high_low(TABLE_NAME_HIGHT_LOW, updated_time, high_low)
     except:
         e = sys.exc_info()[0]

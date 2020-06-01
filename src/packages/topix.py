@@ -1,5 +1,6 @@
 import wget
 import os
+from datetime import datetime
 
 from helpers._selenium import ClientSideCrawler
 from configs.url import TOPIX
@@ -7,7 +8,7 @@ from configs.path import DB_PATH
 from helpers._pd import parse_xlsx_to_df
 from helpers._mysql import df_insert_to_db, PyMysql
 import pandas as pd
-from packages import yahoo
+from packages import yahoo, compare
 from helpers.store_high_low import store_high_low
 
 DATA_STORE_PATH = os.path.join(os.getcwd(), DB_PATH)
@@ -15,6 +16,7 @@ DATA_STORE_PATH = os.path.join(os.getcwd(), DB_PATH)
 TABLE_NAME = 'topix'
 TABLE_NAME_HIGHT_LOW = 'topixhl52'
 TOPIX_SYMBOL_SUFFIX_IN_YAHOO_FINANCE = '.T'
+HIGH_LOW_RECORD = 'topix_hl52_record'
 
 def topix_spider():
     browser = ClientSideCrawler(TOPIX, True)
@@ -97,7 +99,8 @@ def topix_spider():
             search_code_column = [column[2] + TOPIX_SYMBOL_SUFFIX_IN_YAHOO_FINANCE for column in data_arr]
 
             high_low = yahoo.yahoo_spider(search_code_column, TABLE_NAME_HIGHT_LOW, df['Date'].iloc[0])
-            print('high_low %s' % high_low)
+            compare.compare_hl(high_low, TABLE_NAME_HIGHT_LOW, datetime.strptime(df['Date'].iloc[0], '%Y-%m-%d'), HIGH_LOW_RECORD)
+            # Insert High-low 52 today after the comparison is done.
             store_high_low(TABLE_NAME_HIGHT_LOW, df['Date'].iloc[0], high_low)
         browser.tear_down()
     except Exception as inst:

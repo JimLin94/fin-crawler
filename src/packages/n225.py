@@ -45,9 +45,9 @@ def n225_spider():
             df = pd.DataFrame(source, columns=['Code', 'Company', 'Date'])
             df_insert_to_db(table_name=TABLE_NAME, df=df,
                             check_value_column_name='Date', check_value=updated_time_form_text)
-
             high_low = yahoo.yahoo_spider(df['Code'], TABLE_NAME_HIGHT_LOW, updated_time_form_text)
-            store_high_low(TABLE_NAME_HIGHT_LOW, updated_time_form_text, high_low)
             compare.compare_hl(high_low, TABLE_NAME_HIGHT_LOW, updated_time_form_instance, HIGH_LOW_RECORD)
+            # Insert High-low 52 today after the comparison is done.
+            store_high_low(TABLE_NAME_HIGHT_LOW, updated_time_form_text, high_low)
     except Exception as inst:
         print('Error occurs %s' % inst)

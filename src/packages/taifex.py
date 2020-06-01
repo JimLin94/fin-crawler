@@ -96,8 +96,9 @@ def taifex_spider():
         db_con_inst.connection.commit()
 
         high_low = cnyes_api(symbols = codes, date = updated_time)
-        store_high_low(TABLE_NAME_HIGHT_LOW, updated_time, high_low)
         compare.compare_hl(high_low, TABLE_NAME_HIGHT_LOW, datetime.strptime(updated_time, '%Y/%m/%d'), HIGH_LOW_RECORD)
+        # Insert High-low 52 today after the comparison is done.
+        store_high_low(TABLE_NAME_HIGHT_LOW, updated_time, high_low)
     except:
         e = sys.exc_info()[0]
         print(e)

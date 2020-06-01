@@ -40,6 +40,8 @@ def compare_hl(today_hl, fetch_sql_table_name, today, save_to_table_name):
         new_low = 0
         new_high = 0
 
+        # print('HIGH LOW today_hl %s' % today_hl)
+
         for hl in today_hl:
             if float(yesterday_hl_map[hl[0]]['52_week_range_low']) > float(hl[1]):
                 new_low += 1
@@ -47,6 +49,8 @@ def compare_hl(today_hl, fetch_sql_table_name, today, save_to_table_name):
                 new_high += 1
 
         query = 'INSERT INTO ' + save_to_table_name + ' (`new_low`, `new_high`, `date`) VALUES (%s, %s, %s)'
+
+        print('H LOW %s %s' % (new_high, new_low))
 
         db_con_inst.cursur.executemany(query, [[new_low, new_high, today.strftime('%Y/%m/%d')]])
         db_con_inst.connection.commit()
