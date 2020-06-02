@@ -42,7 +42,7 @@ def yahoo_spider(source = [], table_name = '', updated_time = None):
 
         for stock_code in source:
             res = requests.get(YAHOO_FINANCE + stock_code)
-            print('Request %s %s' % (res.status_code, res.url))
+            # print('Request %s %s' % (res.status_code, res.url))
 
             # counter += 1
 
@@ -58,8 +58,8 @@ def yahoo_spider(source = [], table_name = '', updated_time = None):
                     target_split = target_cols[0].get_text().strip().split('-')
                     low = target_split[0].replace(' ', '').replace(',', '')
                     high = target_split[1].replace(' ', '').replace(',', '')
-                    print('Low, High %s %s' % (low, high))
-                    print('Crawler by the date... %s', updated_time)
+                    # print('Low, High %s %s' % (low, high))
+                    # print('Crawler by the date... %s', updated_time)
 
                     low_hight_collection.append([stock_code, low, high, updated_time])
                 except:

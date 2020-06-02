@@ -27,6 +27,10 @@ def compare_hl(today_hl, fetch_sql_table_name, today, save_to_table_name):
         #     print('The date is already compared %s' % today.date())
         #     return
 
+        if not latest_date:
+            print('Comapre High Low - No last data for the table %s' % save_to_table_name)
+            return
+
         db_con_inst.cursur.execute('''
             SELECT * FROM %s WHERE DATE(date)='%s'
         ''' % (fetch_sql_table_name, str(latest_date['date'])))
@@ -55,4 +59,4 @@ def compare_hl(today_hl, fetch_sql_table_name, today, save_to_table_name):
         db_con_inst.cursur.executemany(query, [[new_low, new_high, today.strftime('%Y/%m/%d')]])
         db_con_inst.connection.commit()
     except Exception as inst:
-        print('Error occurs %s' % inst)
+        print('Comapre High Low - Error occurs %s' % inst)

@@ -74,7 +74,7 @@ def topix_spider():
             has_data_existed = db_con_inst.cursur.fetchone()
 
             if has_data_existed:
-                print('Data exists %s', df['Date'].iloc[0])
+                print('Data exists %s' % df['Date'].iloc[0])
                 browser.tear_down()
                 return
 
@@ -98,8 +98,9 @@ def topix_spider():
 
             search_code_column = [column[2] + TOPIX_SYMBOL_SUFFIX_IN_YAHOO_FINANCE for column in data_arr]
 
-            high_low = yahoo.yahoo_spider(search_code_column, TABLE_NAME_HIGHT_LOW, df['Date'].iloc[0])
-            compare.compare_hl(high_low, TABLE_NAME_HIGHT_LOW, datetime.strptime(df['Date'].iloc[0], '%Y-%m-%d'), HIGH_LOW_RECORD)
+            today_str = datetime.strptime(str(int(df['Date'].iloc[0])), '%Y%m%d')
+            high_low = yahoo.yahoo_spider(search_code_column, TABLE_NAME_HIGHT_LOW, today_str)
+            compare.compare_hl(high_low, TABLE_NAME_HIGHT_LOW, today_str, HIGH_LOW_RECORD)
             # Insert High-low 52 today after the comparison is done.
             store_high_low(TABLE_NAME_HIGHT_LOW, df['Date'].iloc[0], high_low)
         browser.tear_down()
