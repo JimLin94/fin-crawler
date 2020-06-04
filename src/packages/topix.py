@@ -76,7 +76,6 @@ def topix_spider():
             if has_data_existed:
                 print('Data exists %s' % df['Date'].iloc[0])
                 browser.tear_down()
-                return
 
             data_arr = list()
 
