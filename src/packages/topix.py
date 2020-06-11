@@ -99,9 +99,10 @@ def topix_spider():
 
             today_str = datetime.strptime(str(int(df['Date'].iloc[0])), '%Y%m%d')
             high_low = yahoo.yahoo_spider(search_code_column, TABLE_NAME_HIGHT_LOW, today_str)
-            compare.compare_hl(high_low, TABLE_NAME_HIGHT_LOW, today_str, HIGH_LOW_RECORD)
-            # Insert High-low 52 today after the comparison is done.
-            store_high_low(TABLE_NAME_HIGHT_LOW, df['Date'].iloc[0], high_low)
+            if high_low:
+                compare.compare_hl(high_low, TABLE_NAME_HIGHT_LOW, today_str, HIGH_LOW_RECORD)
+                # Insert High-low 52 today after the comparison is done.
+                store_high_low(TABLE_NAME_HIGHT_LOW, df['Date'].iloc[0], high_low)
         browser.tear_down()
     except Exception as inst:
         print('Error occurs while running TOPIX')

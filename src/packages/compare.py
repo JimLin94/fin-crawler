@@ -47,6 +47,7 @@ def compare_hl(today_hl, fetch_sql_table_name, today, save_to_table_name):
         # print('HIGH LOW today_hl %s' % today_hl)
 
         for hl in today_hl:
+            # print('yesterday_hl_map %s' % yesterday_hl_map)
             if float(yesterday_hl_map[hl[0]]['52_week_range_low']) > float(hl[1]):
                 new_low += 1
             if float(yesterday_hl_map[hl[0]]['52_week_range_high']) < float(hl[2]):
